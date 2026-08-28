@@ -1,0 +1,20 @@
+========================================
+EYEPACS DATASET EXPLORATION REPORT
+========================================
+
+STATUS:
+- EyePACS data is not present in this workspace yet.
+- Kaggle CLI is installed, but Kaggle authentication is required before the dataset can be downloaded.
+- Run `kaggle auth login`, accept the competition rules on Kaggle, then download/extract the data into `data/raw/eyepacs/`.
+
+EXPECTED DATASET LOCATION:
+- data/raw/eyepacs/trainLabels.csv
+- data/raw/eyepacs/train/*.jpeg
+
+GENERATED ASSETS:
+- notebooks/01_data_exploration.ipynb contains the full Week 1 EDA workflow.
+- data/labels/train.csv, val.csv, and test.csv contain headers only until the notebook is run on the real dataset.
+- reports/figures/ is ready for generated visualizations.
+
+NEXT ACTION:
+Run `notebooks/01_data_exploration.ipynb` after dataset extraction. It will compute real metrics, create stratified splits, save figures, and overwrite this report with measured findings.

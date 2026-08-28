@@ -26,6 +26,9 @@ reports/*
 !data/processed/.gitkeep
 !models/.gitkeep
 !reports/.gitkeep
+!reports/01_DATA_EXPLORATION_REPORT.txt
+!reports/figures/
+!reports/figures/.gitkeep
 
 # OS and editor
 .DS_Store

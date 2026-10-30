@@ -57,3 +57,50 @@ NEXT STEPS (WEEK 2):
 3. Transfer learning baseline (EfficientNet)
 4. Handle class imbalance with weighted loss
 5. Define evaluation metrics (Macro-F1, per-class Recall)
+
+
+========================================
+DEDUPLICATION AND SPLIT VERIFICATION
+========================================
+
+1. Source: data/labels/train.csv, val.csv, test.csv (original stratified 70/15/15 split of
+   dr_unified_v2, random_state=42). Originals are kept unchanged.
+
+2. Exact duplicate detection: MD5 of file bytes, after grouping by byte size.
+   - Duplicate groups (distinct content): 188
+   - Files inside those groups: 383
+   - Extra copies: 195
+
+3. Severity label conflicts: 15 groups (14 pairs, 1 triplet), 31 files.
+   Policy: every member of a conflict group is excluded from all splits.
+
+4. Train/test leakage before dedup: 39 groups had members in both train and test.
+
+5. Dedup rule for the remaining groups:
+   - Priority train > val > test.
+   - Within a split, keep the first copy in CSV order.
+   - Remove all other copies.
+
+6. Removed rows: 210 total (179 uniform-group copies + 31 conflict-group files).
+   Per split: train 116 removed, val 46 removed, test 48 removed.
+
+7. Resulting split sizes:
+   - train_dedup.csv: 64,634
+   - val_dedup.csv: 13,829
+   - test_dedup.csv: 13,828
+   - Total: 92,291 (92,291 + 210 = 92,501)
+
+8. Verification results (all passed):
+   - Row counts match the numbers above.
+   - Columns match the originals.
+   - All image paths exist on disk (0 missing).
+   - None of the 31 conflict files appear in any dedup file.
+   - No MD5 value appears in more than one dedup row.
+   - No MD5 value is shared between train_dedup and test_dedup.
+
+9. Limitation: MD5 detects only byte-identical files. Re-encoded, resized, or cropped
+   copies of the same fundus image are not detected. Near-duplicate detection
+   (for example perceptual hashing) is not yet done.
+
+10. Original split files (train.csv, val.csv, test.csv) are retained. Training in
+    Week 2 uses the *_dedup.csv files.
